@@ -42,4 +42,8 @@ export default {
       .isString()
       .withMessage('Password must be valid'),
   ],
+  post_invite: [
+    body('input.email').notEmpty().isEmail().withMessage('Email must be valid'),
+    body('input.role').notEmpty().isString().withMessage('Role must be valid'),
+  ],
 }

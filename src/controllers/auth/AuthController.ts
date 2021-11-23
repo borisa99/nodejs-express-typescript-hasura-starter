@@ -67,4 +67,12 @@ export class AuthController {
       res.status(500).send({ message: error.message })
     }
   }
+  public invite = async (req: Request, res: Response): Promise<void> => {
+    const { email, role } = req.body.input
+    try {
+      serviceResponseHandler(res, await this.authService.invite(email, role))
+    } catch (error: any) {
+      res.status(500).send({ message: error.message })
+    }
+  }
 }
