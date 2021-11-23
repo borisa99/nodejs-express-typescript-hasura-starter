@@ -27,14 +27,28 @@ export class AuthService implements IAuthService {
   ): Promise<ServiceResponse<string>> {
     const response: ServiceResponse<string> = new ServiceResponse<string>()
     try {
-      const ticket = uuidv4()
+      const invite = await db<Invite>('invites').where({ email }).first()
+
+      if (invite && invite.expires_at > dayjs().toDate()) {
+        response.status = 400
+        response.error = 'User already invited'
+        return response
+      }
+      // Delete existing invites
+      await db<Invite>('invites').where({ email }).del()
+
       // Create invite
-      await db<Invite>('invites').insert({
-        email,
-        ticket,
-        expires_at: dayjs().add(1, 'day').toDate(),
-        role,
-      })
+      const ticket = uuidv4()
+
+      await db<Invite>('invites')
+        .returning('id')
+        .insert({
+          role,
+          email,
+          ticket,
+          expires_at: dayjs().add(1, 'day').toDate(),
+        })
+
       // Send email
       await emailClient.send({
         template: 'invite',
@@ -48,9 +62,10 @@ export class AuthService implements IAuthService {
           },
         },
         locals: {
-          url: `http://${process.env.HOST}/api/auth/register?ticket=${ticket}`,
+          url: `http://${process.env.FRONTEND_URL}/register?ticket=${ticket}`,
         },
       })
+      response.payload = 'Success'
     } catch (error: any) {
       response.status = 500
       response.error = error.message
