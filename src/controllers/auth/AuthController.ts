@@ -9,7 +9,8 @@ export class AuthController {
 
   public register = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { user } = req.body
+      const { user } = req.body.input
+
       serviceResponseHandler(res, await this.authService.register(user))
     } catch (error: any) {
       res.status(500).send({ message: error.message })
@@ -63,6 +64,14 @@ export class AuthController {
         res,
         await this.authService.resetPassword(<string>ticket, password)
       )
+    } catch (error: any) {
+      res.status(500).send({ message: error.message })
+    }
+  }
+  public invite = async (req: Request, res: Response): Promise<void> => {
+    const { email, role } = req.body.input
+    try {
+      serviceResponseHandler(res, await this.authService.invite(email, role))
     } catch (error: any) {
       res.status(500).send({ message: error.message })
     }

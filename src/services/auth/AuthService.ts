@@ -18,8 +18,62 @@ import { generateRefreshToken, generateToken } from '@/shared/jwt'
 import { RefreshToken } from '@/models/RefreshToken'
 import { validateAccount, updateTicket, isTicketValid } from '@/shared/account'
 import { AccountValidation } from '@/shared/types/auth/AccountValiation'
+import { Invite } from '@/models/Invite'
 @Service()
 export class AuthService implements IAuthService {
+  async invite(
+    email: string,
+    role: RoleValue
+  ): Promise<ServiceResponse<string>> {
+    const response: ServiceResponse<string> = new ServiceResponse<string>()
+    try {
+      const invite = await db<Invite>('invites').where({ email }).first()
+
+      // TODO check if user exists
+      // TODO check if user is already invited
+      if (invite && invite.expires_at > dayjs().toDate()) {
+        response.status = 400
+        response.error = 'User already invited'
+        return response
+      }
+      // Delete existing invites
+      await db<Invite>('invites').where({ email }).del()
+
+      // Create invite
+      const ticket = uuidv4()
+
+      await db<Invite>('invites')
+        .returning('id')
+        .insert({
+          role,
+          email,
+          ticket,
+          expires_at: dayjs().add(1, 'day').toDate(),
+        })
+
+      // Send email
+      await emailClient.send({
+        template: 'invite',
+        message: {
+          to: email,
+          headers: {
+            'x-ticket': {
+              prepared: true,
+              value: ticket,
+            },
+          },
+        },
+        locals: {
+          url: `http://${process.env.FRONTEND_URL}/register?ticket=${ticket}`,
+        },
+      })
+      response.payload = 'Success'
+    } catch (error: any) {
+      response.status = 500
+      response.error = error.message
+    }
+    return response
+  }
   async resetPassword(
     ticket: string,
     password: string
@@ -215,6 +269,19 @@ export class AuthService implements IAuthService {
       }
       //TODO - check if requested roles are valid
 
+      // Check invite
+      const invite = await db<Invite>('invites')
+        .where({ ticket: user.ticket })
+        .andWhere(function () {
+          this.where('expires_at', '>', dayjs().toDate())
+        })
+        .first()
+      if (!invite || invite.email !== user.email) {
+        response.status = 400
+        response.error = 'Invalid ticket'
+        return response
+      }
+
       //Create new user
       const [user_id]: string = await db<User>('users').returning('id').insert({
         first_name: user.first_name,
@@ -223,43 +290,24 @@ export class AuthService implements IAuthService {
       })
 
       //Create new account
-      const ticket = uuidv4()
       const [account_id]: string = await db<Account>('accounts')
         .returning('id')
         .insert({
           user_id,
           email: user.email,
           password_hash: await hashPassword(user.password),
-          ticket,
-          ticket_expires_at: dayjs().add(1, 'day').toDate(),
+          is_active: true,
         })
 
       // Insert account roles
-      const accountRoles = user.roles.map((role: RoleValue) => {
+      const roles: RoleValue[] = [invite.role, RoleValue.USER]
+      const accountRoles = roles.map((role: RoleValue) => {
         return {
           account_id,
           role,
         }
       })
       await db<AccountRole>('account_roles').insert(accountRoles)
-
-      //Send email
-      await emailClient.send({
-        template: 'activate-account',
-        message: {
-          to: user.email,
-          headers: {
-            'x-ticket': {
-              prepared: true,
-              value: ticket,
-            },
-          },
-        },
-        locals: {
-          display_name: user.first_name + ' ' + user.last_name,
-          url: `http://${process.env.HOST}/api/auth/activate?ticket=${ticket}`,
-        },
-      })
 
       response.payload = 'success'
     } catch (error: any) {

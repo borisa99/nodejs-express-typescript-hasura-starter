@@ -14,7 +14,10 @@ export const serviceResponseHandler = (
       value: data.payload,
     }
   }
-  if (data.status.toFixed().startsWith('4')) {
+  if (
+    data.status.toFixed().startsWith('4') ||
+    data.status.toFixed().startsWith('5')
+  ) {
     const error: HasuraErrorResponse = {
       message: data.error,
       code: data.error.trim().split(' ').join('_').toLowerCase(),
