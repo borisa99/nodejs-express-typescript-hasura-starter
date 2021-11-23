@@ -36,7 +36,7 @@ export async function seed(knex: Knex): Promise<void> {
     })
 
   // Insert account roles
-  const roles = [RoleValue.ADMIN, RoleValue.USER]
+  const roles = [RoleValue.SUPER_ADMIN, RoleValue.USER]
   const accountRoles = roles.map((role: RoleValue) => {
     return {
       account_id,

@@ -7,7 +7,9 @@ export async function seed(knex: Knex): Promise<void> {
 
   // Inserts seed entries
   await knex('roles').insert([
-    { value: RoleValue['ADMIN'] },
+    { value: RoleValue['SUPER_ADMIN'] },
+    { value: RoleValue['COMPANY_ADMIN'] },
+    { value: RoleValue['COMPANY_USER'] },
     { value: RoleValue['USER'] },
   ])
 }
