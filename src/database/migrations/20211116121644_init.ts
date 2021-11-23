@@ -4,15 +4,6 @@ export async function up(knex: Knex): Promise<void> {
   //Add PG CRYPTO extension
   await knex.raw('CREATE EXTENSION IF NOT EXISTS pgcrypto')
 
-  //  Create invites table
-  await knex.schema.createTable('invites', table => {
-    table.uuid('id').primary()
-    table.string('ticket').unique()
-    table.timestamp('expires_at').notNullable()
-    table.string('email').unique()
-    table.timestamps(true, true)
-  })
-
   //CREATE users TABLE
   await knex.schema.createTable('users', table => {
     table.uuid('id').primary().defaultTo(knex.raw('public.gen_random_uuid()'))
@@ -25,6 +16,21 @@ export async function up(knex: Knex): Promise<void> {
   //CREATE roles TABLE
   await knex.schema.createTable('roles', table => {
     table.string('value').primary().notNullable()
+  })
+
+  //  Create invites table
+  await knex.schema.createTable('invites', table => {
+    table.uuid('id').primary().defaultTo(knex.raw('public.gen_random_uuid()'))
+    table.uuid('ticket').unique()
+    table.timestamp('expires_at').notNullable()
+    table.string('email').unique()
+    table
+      .string('role')
+      .notNullable()
+      .references('value')
+      .inTable('roles')
+      .onDelete('CASCADE')
+    table.timestamps(true, true)
   })
 
   //CREATE accounts TABLE
