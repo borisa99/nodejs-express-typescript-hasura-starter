@@ -1,3 +1,4 @@
+import { HasuraErrorResponse } from '@/shared/types/HasuraErrorResponse'
 import express from 'express'
 import { validationResult, ValidationChain } from 'express-validator'
 
@@ -35,8 +36,10 @@ export const validate = async (
   if (errors.isEmpty()) {
     return next()
   }
-  res.status(400).json({
-    message:
-      errors.array()[0].msg + '.' + ' Location ' + errors.array()[0].param,
-  })
+  const firstError = errors.array()[0]
+  const error: HasuraErrorResponse = {
+    message: firstError.msg + '.' + ' Location ' + firstError.param,
+    code: firstError.msg.trim().split(' ').join('_').toLowerCase(),
+  }
+  res.status(400).json(error)
 }
