@@ -29,6 +29,8 @@ export class AuthService implements IAuthService {
     try {
       const invite = await db<Invite>('invites').where({ email }).first()
 
+      // TODO check if user exists
+      // TODO check if user is already invited
       if (invite && invite.expires_at > dayjs().toDate()) {
         response.status = 400
         response.error = 'User already invited'
@@ -266,6 +268,19 @@ export class AuthService implements IAuthService {
         return response
       }
       //TODO - check if requested roles are valid
+
+      // Check invite
+      const invite = await db<Invite>('invites')
+        .where({ ticket: user.ticket })
+        .andWhere(function () {
+          this.where('expires_at', '>', dayjs().toDate())
+        })
+        .first()
+      if (!invite || invite.email !== user.email) {
+        response.status = 400
+        response.error = 'Invalid ticket'
+        return response
+      }
 
       //Create new user
       const [user_id]: string = await db<User>('users').returning('id').insert({
