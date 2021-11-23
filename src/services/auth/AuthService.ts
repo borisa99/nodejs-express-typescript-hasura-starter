@@ -18,12 +18,39 @@ import { generateRefreshToken, generateToken } from '@/shared/jwt'
 import { RefreshToken } from '@/models/RefreshToken'
 import { validateAccount, updateTicket, isTicketValid } from '@/shared/account'
 import { AccountValidation } from '@/shared/types/auth/AccountValiation'
+import { Invite } from '@/models/Invite'
 @Service()
 export class AuthService implements IAuthService {
-  async invite(email: string): Promise<ServiceResponse<string>> {
+  async invite(
+    email: string,
+    role: RoleValue
+  ): Promise<ServiceResponse<string>> {
     const response: ServiceResponse<string> = new ServiceResponse<string>()
     try {
-      response.payload = email
+      const ticket = uuidv4()
+      // Create invite
+      await db<Invite>('invites').insert({
+        email,
+        ticket,
+        expires_at: dayjs().add(1, 'day').toDate(),
+        role,
+      })
+      // Send email
+      await emailClient.send({
+        template: 'invite',
+        message: {
+          to: email,
+          headers: {
+            'x-ticket': {
+              prepared: true,
+              value: ticket,
+            },
+          },
+        },
+        locals: {
+          url: `http://${process.env.HOST}/api/auth/register?ticket=${ticket}`,
+        },
+      })
     } catch (error: any) {
       response.status = 500
       response.error = error.message
