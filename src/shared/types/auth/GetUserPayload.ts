@@ -1,11 +1,7 @@
-import { RoleValue } from '@/models/RoleValue'
+import { AuthPayload } from './AuthPayload'
 
-export interface GetUserPayload {
-  id: string
-  account_id: string
-  email: string
+export interface GetUserPayload extends AuthPayload {
   first_name: string
   last_name: string
   avatar_url: string
-  roles: RoleValue[]
 }
