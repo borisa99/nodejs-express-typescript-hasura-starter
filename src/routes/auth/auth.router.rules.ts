@@ -33,7 +33,10 @@ export default {
     body('input.email').notEmpty().isEmail().withMessage('Email must be valid'),
   ],
   post_reset_password: [
-    body('ticket').notEmpty().isString().withMessage('Ticket must be valid'),
+    body('input.ticket')
+      .notEmpty()
+      .isString()
+      .withMessage('Ticket must be valid'),
     body('password')
       .notEmpty()
       .isString()

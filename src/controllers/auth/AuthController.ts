@@ -57,7 +57,7 @@ export class AuthController {
     }
   }
   public resetPassword = async (req: Request, res: Response): Promise<void> => {
-    const { ticket, password } = req.body
+    const { ticket, password } = req.body.input
     try {
       serviceResponseHandler(
         res,
