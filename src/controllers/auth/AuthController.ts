@@ -46,7 +46,7 @@ export class AuthController {
     req: Request,
     res: Response
   ): Promise<void> => {
-    const { email } = req.body
+    const { email } = req.body.input
     try {
       serviceResponseHandler(
         res,
