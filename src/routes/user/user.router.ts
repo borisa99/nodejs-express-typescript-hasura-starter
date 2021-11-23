@@ -1,7 +1,7 @@
 import { userController } from '@/controllers'
 import { router } from '@/router_wrapper'
 
-router.get({
+router.post({
   routeName: '/me',
   handler: userController.me,
 })
