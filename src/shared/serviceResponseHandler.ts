@@ -6,6 +6,14 @@ export const serviceResponseHandler = (
   res: Response,
   data: ServiceResponse<any>
 ) => {
+  if (
+    data.payload &&
+    (typeof data.payload === 'string' || data.payload instanceof String)
+  ) {
+    data.payload = {
+      value: data.payload,
+    }
+  }
   if (data.status.toFixed().startsWith('4')) {
     const error: HasuraErrorResponse = {
       message: data.error,
