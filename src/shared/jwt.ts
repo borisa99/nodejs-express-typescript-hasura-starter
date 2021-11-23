@@ -49,7 +49,7 @@ export const generateTokenPayload = async (
 
   tokenPayload['https://hasura.io/jwt/claims'] = {
     'x-hasura-allowed-roles': tokenPayload.roles,
-    'x-hasura-default-role': tokenPayload.roles[0],
+    'x-hasura-default-role': RoleValue.USER,
     'x-hasura-user-id': tokenPayload.id,
     'x-hasura-account-id': tokenPayload.account_id,
   }

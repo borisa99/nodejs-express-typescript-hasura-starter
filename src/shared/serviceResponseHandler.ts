@@ -23,7 +23,7 @@ export const serviceResponseHandler = (
   }
   if (data.status.toFixed().startsWith('3')) {
     res.writeHead(data.status, {
-      location: data.payload,
+      location: data.payload.value,
     })
     return res.end()
   }
