@@ -20,6 +20,16 @@ import { validateAccount, updateTicket, isTicketValid } from '@/shared/account'
 import { AccountValidation } from '@/shared/types/auth/AccountValiation'
 @Service()
 export class AuthService implements IAuthService {
+  async invite(email: string): Promise<ServiceResponse<string>> {
+    const response: ServiceResponse<string> = new ServiceResponse<string>()
+    try {
+      response.payload = email
+    } catch (error: any) {
+      response.status = 500
+      response.error = error.message
+    }
+    return response
+  }
   async resetPassword(
     ticket: string,
     password: string
