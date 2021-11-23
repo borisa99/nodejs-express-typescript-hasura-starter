@@ -13,7 +13,9 @@ const auth = (allowedRoles: RoleValue[] = [], isPublic = false) => {
 
     try {
       let token: string | null =
-        'token' in req.headers ? (req.headers.token as string) : null
+        'authorization' in req.headers
+          ? (req.headers.authorization as string)
+          : null
 
       let jwtPayload
       const secret: string = process.env.JWT_SECRET || ''
