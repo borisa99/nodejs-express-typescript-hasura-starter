@@ -9,7 +9,8 @@ export class AuthController {
 
   public register = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { user } = req.body
+      const { user } = req.body.input
+
       serviceResponseHandler(res, await this.authService.register(user))
     } catch (error: any) {
       res.status(500).send({ message: error.message })
