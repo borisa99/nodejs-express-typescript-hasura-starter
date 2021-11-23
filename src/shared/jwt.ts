@@ -23,7 +23,7 @@ export const generateTokenPayload = async (
     .leftJoin('users', 'accounts.user_id', 'users.id')
     .where('accounts.id', account_id)
     .first()
-  tokenPayload.roles  = await db<RoleValue>('account_roles')
+  tokenPayload.roles = await db<RoleValue>('account_roles')
     .select('role')
     .where('account_id', account_id)
     .pluck('role')

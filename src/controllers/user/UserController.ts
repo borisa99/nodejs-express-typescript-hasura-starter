@@ -12,8 +12,8 @@ export class UserController {
     try {
       const { account_id } = res.locals.user
       serviceResponseHandler(res, await this.userService.me(account_id))
-    } catch (error) {
-      res.status(500).send(error)
+    } catch (error: any) {
+      res.status(500).send({ message: error.message })
     }
   }
 }

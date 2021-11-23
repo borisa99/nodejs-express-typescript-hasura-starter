@@ -11,8 +11,8 @@ export class AuthController {
     try {
       const { user } = req.body
       serviceResponseHandler(res, await this.authService.register(user))
-    } catch (error) {
-      res.status(500).send(error)
+    } catch (error: any) {
+      res.status(500).send({ message: error.message })
     }
   }
   public activate = async (req: Request, res: Response): Promise<void> => {
@@ -22,24 +22,24 @@ export class AuthController {
         res,
         await this.authService.activate(<string>ticket)
       )
-    } catch (error) {
-      res.status(500).send(error)
+    } catch (error: any) {
+      res.status(500).send({ message: error.message })
     }
   }
   public login = async (req: Request, res: Response): Promise<void> => {
     try {
       const { email, password } = req.body.input
       serviceResponseHandler(res, await this.authService.login(email, password))
-    } catch (error) {
-      res.status(500).send(error)
+    } catch (error: any) {
+      res.status(500).send({ message: error.message })
     }
   }
   public refresh = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { refresh_token } = req.body
+      const { refresh_token } = req.body.input
       serviceResponseHandler(res, await this.authService.refresh(refresh_token))
-    } catch (error) {
-      res.status(500).send(error)
+    } catch (error: any) {
+      res.status(500).send({ message: error.message })
     }
   }
   public requestResetPassword = async (
@@ -52,8 +52,8 @@ export class AuthController {
         res,
         await this.authService.requestPasswordReset(email)
       )
-    } catch (error) {
-      res.status(500).send(error)
+    } catch (error: any) {
+      res.status(500).send({ message: error.message })
     }
   }
   public resetPassword = async (req: Request, res: Response): Promise<void> => {
@@ -63,8 +63,8 @@ export class AuthController {
         res,
         await this.authService.resetPassword(<string>ticket, password)
       )
-    } catch (error) {
-      res.status(500).send(error)
+    } catch (error: any) {
+      res.status(500).send({ message: error.message })
     }
   }
 }

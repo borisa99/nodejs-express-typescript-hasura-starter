@@ -11,8 +11,8 @@ export class WeatherController {
     try {
       const { city } = req.body
       serviceResponseHandler(res, await this.weatherService.get(city))
-    } catch (error) {
-      res.status(500).send(error)
+    } catch (error: any) {
+      res.status(500).send({ message: error.message })
     }
   }
 }

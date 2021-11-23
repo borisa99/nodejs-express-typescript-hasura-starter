@@ -9,7 +9,7 @@ export class UserService implements IUserService {
     const response: ServiceResponse<GetUserPayload> =
       new ServiceResponse<GetUserPayload>()
     try {
-      response.payload = await generateTokenPayload(account_id) 
+      response.payload = await generateTokenPayload(account_id)
     } catch (error: any) {
       response.error = error.message
       response.status = 500

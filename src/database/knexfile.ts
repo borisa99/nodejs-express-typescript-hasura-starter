@@ -8,22 +8,21 @@ dotenv.config({ path: resolve(__dirname, '../../.env') })
 const config: Knex.Config = {
   client: process.env.DATABASE_CLIENT,
   connection: {
-    connectionString: process.env.DATABASE_URL
+    connectionString: process.env.DATABASE_URL,
   },
   pool: {
     min: 2,
-    max: 10
+    max: 10,
   },
   migrations: {
     extension: 'ts',
     tableName: 'knex_migrations',
-    directory: 'migrations'
+    directory: 'migrations',
   },
   seeds: {
     extension: 'ts',
-    directory: 'seeds'
-  }
+    directory: 'seeds',
+  },
 }
-
 
 export default config

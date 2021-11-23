@@ -8,8 +8,9 @@ export default class Model {
   private readonly tableName: string
 
   constructor() {
-    this.tableName = pluralize.plural(snakeCase(Object.getPrototypeOf(this).constructor.name))
+    this.tableName = pluralize.plural(
+      snakeCase(Object.getPrototypeOf(this).constructor.name)
+    )
     this.db = knex_instance<this>(this.tableName)
   }
 }
-
