@@ -290,15 +290,13 @@ export class AuthService implements IAuthService {
       })
 
       //Create new account
-      const ticket = uuidv4()
       const [account_id]: string = await db<Account>('accounts')
         .returning('id')
         .insert({
           user_id,
           email: user.email,
           password_hash: await hashPassword(user.password),
-          ticket,
-          ticket_expires_at: dayjs().add(1, 'day').toDate(),
+          is_active: true,
         })
 
       // Insert account roles
@@ -310,24 +308,6 @@ export class AuthService implements IAuthService {
         }
       })
       await db<AccountRole>('account_roles').insert(accountRoles)
-
-      //Send email
-      await emailClient.send({
-        template: 'activate-account',
-        message: {
-          to: user.email,
-          headers: {
-            'x-ticket': {
-              prepared: true,
-              value: ticket,
-            },
-          },
-        },
-        locals: {
-          display_name: user.first_name + ' ' + user.last_name,
-          url: `http://${process.env.HOST}/api/auth/activate?ticket=${ticket}`,
-        },
-      })
 
       response.payload = 'success'
     } catch (error: any) {
