@@ -12,12 +12,14 @@ const auth = (allowedRoles: RoleValue[] = [], isPublic = false) => {
     }
 
     try {
-      const token: string | null =
+      let token: string | null =
         'token' in req.headers ? (req.headers.token as string) : null
 
       let jwtPayload
       const secret: string = process.env.JWT_SECRET || ''
       if (token) {
+        token = token.replace('Bearer', '').trim()
+
         // Check if token is valid
         jwtPayload = <any>jwt.verify(token, secret)
 
