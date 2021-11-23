@@ -37,7 +37,7 @@ export default {
       .notEmpty()
       .isString()
       .withMessage('Ticket must be valid'),
-    body('password')
+    body('input.password')
       .notEmpty()
       .isString()
       .withMessage('Password must be valid'),
