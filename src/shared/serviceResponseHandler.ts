@@ -6,7 +6,9 @@ export const serviceResponseHandler = (
   data: ServiceResponse<any>
 ) => {
   if (data.status.toFixed().startsWith('4')) {
-    return res.status(data.status).send(data)
+    return res.status(data.status).send({
+      message: data.error,
+    })
   }
   if (data.status.toFixed().startsWith('3')) {
     res.writeHead(data.status, {
@@ -14,5 +16,5 @@ export const serviceResponseHandler = (
     })
     return res.end()
   }
-  return res.send(data)
+  return res.send(data.payload)
 }

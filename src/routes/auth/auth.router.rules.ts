@@ -17,8 +17,8 @@ export default {
       .withMessage('Ticket query parameter is required'),
   ],
   post_login: [
-    body('email').notEmpty().isEmail().withMessage('Email must be valid'),
-    body('password')
+    body('input.email').notEmpty().isEmail().withMessage('Email must be valid'),
+    body('input.password')
       .notEmpty()
       .isString()
       .withMessage('Password must be valid'),
