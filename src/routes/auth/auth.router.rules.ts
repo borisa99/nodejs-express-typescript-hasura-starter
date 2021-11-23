@@ -8,9 +8,6 @@ export default {
     body('user.password')
       .isLength({ min: 8 })
       .withMessage('Password must be minimum 8 characters long'),
-    body('user.roles')
-      .isArray()
-      .withMessage('Roles must be valid array of available roles'),
   ],
   get_activate: [
     query('ticket')

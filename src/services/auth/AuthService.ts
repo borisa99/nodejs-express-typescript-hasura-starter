@@ -302,7 +302,8 @@ export class AuthService implements IAuthService {
         })
 
       // Insert account roles
-      const accountRoles = user.roles.map((role: RoleValue) => {
+      const roles: RoleValue[] = [invite.role, RoleValue.USER]
+      const accountRoles = roles.map((role: RoleValue) => {
         return {
           account_id,
           role,
