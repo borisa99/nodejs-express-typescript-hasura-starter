@@ -53,8 +53,20 @@
 
 # How to run
 
+### Run the Hasura, Postgres and Mailhog instances
+In `hasura-starter`  directory
 ```
-copy .env.example to .env 
+git clone https://github.com/borisa99/hasura-starter.git
+cd hasura-starter
+cp docker-compose.yml.example docker-compose.yml
+docker-compose up --build -d
+```
+In `nodejs-express-typescript-hasura-starter`  directory
+
+### Run NodeJS app
+```
+git clone https://github.com/borisa99/nodejs-express-typescript-hasura-starter. git
+cp .env.example to .env 
 npm install
 npm run knex migrate:latest
 npm run knex seed:run
