@@ -86,27 +86,68 @@ npm run format - prettier format
 
 All global plugins and helper functions are created in `shared` directory in separate directories and files
 
-# Routes 
+# API reference 
 
-**/api/auth**
 ______________________
 
-| Route | Description | Params | Public |
-| ----- | ----------- | ------ | --------- |
-| / register | register a new user | user: RegisterUser.ts | true |
-| / activate | activate users account | ticket: string | true |
-| / login | login existing user | username: string, password: string | true |
-| / refresh | refresh users jwt | refresh_token: string | true |
-| / request_reset_password | request reset user passowrd reset | email: string | true |
-| / reset_password | reset users password | ticket: string, password: string | true |
+## Authentication
+### /auth/invite
+Invite new user to the system 
+Method : `POST`
+**parameters**
+these params should be inside input object beacuse of Hasura Actions 
+- email: string (required)
+- role: string (required) 
 
-**/api/user**
-______________________
-| Route | Description | Params | Public |
-| ----- | ----------- | ------ | ------ |
-| / me | get current user | / | false |
+### /auth/register
+Register new user 
+Method : `POST`
+**parameters**
+these params should be inside user object inside input object beacuse of Hasura Actions 
+- ticket: string (required)
+- first_name: string (required) 
+- last_name: string (required) 
+- email: string (required) 
+- avatar_url: string (required) 
+- password: string (required) 
 
-*Non public routes require JWT to be passed in headers in token key
+### /auth/login
+Login existing user 
+Method : `POST`
+**parameters**
+these params should be inside input object beacuse of Hasura Actions 
+- email: string (required)
+- password: string (required) 
+
+### /auth/refresh
+Refresh JWT with refresh_token 
+Method : `POST`
+**parameters**
+these params should be inside input object beacuse of Hasura Actions 
+- refresh_token: string (required)
+
+### /user/me
+Get current user
+Method : `POST`
+
+### /auth/request_reset_password
+Request reset password for user
+Method : `POST`
+**parameters**
+these params should be inside input object beacuse of Hasura Actions 
+- email: string (required)
+
+### /auth/reset_password
+Reset password using the ticket recieved in email       
+Method : `POST`
+**parameters**
+these params should be inside input object beacuse of Hasura Actions 
+- ticket: string (required)
+- password: string (required)
+
+
+
+*Non public routes require 'Bearer' + JWT to be passed in headers in Authorization key
 # Database query - in progress
 
 This application is using [knex](https://knexjs.org/#Builder-knex) as driver for database. You can use knex directly
