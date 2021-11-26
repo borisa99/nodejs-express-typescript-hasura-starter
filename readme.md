@@ -3,7 +3,7 @@
 |   Name         | Description |
 | -------------- | ----------- | 
 | Authentication | Creating new users and verifying their identity |
-| Authorisation  | Roke based access managment on each route and resource |
+| Authorisation  | Role based access managment on each route and resource |
 | Mailing client | Ready to use mailing client that uses fully customisable embedded                            javascript templates |
 | Request validation | Setting up request rules for each route that will be loaded                                  automatically from file that follows naming convention |
 | Authentication with socials | TO DO |
