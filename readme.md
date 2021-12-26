@@ -158,6 +158,14 @@ these params should be inside input object beacuse of Hasura Actions
 - password: string (required)
 
 
+### /file/upload
+Upload file to cloud storage       
+Method : `POST`
+**parameters**
+this api should be called directly, not over the Hasura action
+- base64String: string (required)
+
+
 
 *Non public routes require 'Bearer' + JWT to be passed in headers in Authorization key
 # Database query - in progress
