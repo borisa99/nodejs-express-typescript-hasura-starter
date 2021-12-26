@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({  extended: true }))
 app.use(cors(corsOptions))
 app.get('/health', (req: Request, res: Response) => {
   res.send('OK')
