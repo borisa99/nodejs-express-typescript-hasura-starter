@@ -1,3 +1,4 @@
+import http from 'http'
 import express, { Request, Response } from 'express'
 import cors, { CorsOptions } from 'cors'
 
@@ -21,4 +22,7 @@ app.get('/health', (req: Request, res: Response) => {
   res.send('OK')
 })
 
-export { app }
+// Create server from http module so socket can also use it
+const server = http.createServer(app)
+
+export { app, server, corsOptions }
