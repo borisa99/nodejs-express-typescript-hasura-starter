@@ -23,6 +23,7 @@
     "@types/express-serve-static-core": "^4.17.24",
     "@types/jsonwebtoken": "^8.5.6",
     "@types/nodemailer": "^6.4.4",
+    "aws-sdk": "^2.1048.0",
     "babel-jest": "^27.3.1",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
