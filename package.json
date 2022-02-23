@@ -40,6 +40,8 @@
     "nodemailer": "^6.7.1",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
+    "socket.io": "^4.4.1",
+    "socketio-jwt": "^4.6.2",
     "tslib": "^2.3.1",
     "typedi": "^0.10.0",
     "typescript-pluralize": "^1.0.1",
