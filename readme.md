@@ -8,6 +8,7 @@
 | Request validation | Setting up request rules for each route that will be loaded                                  automatically from file that follows naming convention |
 | Authentication with socials | TO DO |
 | File upload | TO DO |
+| Realtime, bi-directional communication | This is accomplished using socket.io library |
 
 # Folder Structue 
 1. **~** - root
@@ -31,6 +32,7 @@
          - `auth.ts` - global authentication middleware that validates user and his access permission
          - `requestValidator.ts` - global middleware that automatically loads `{route name}.router.rules.ts` file and validates incoming request based on its rules
        - **/ models** - For each database table there should be corresponding **ts** file.
+       - **/ plugins** - Directory with extensions such as socket.io, redis... - socket.io - inital setup is created in index.ts and socket events and listeners             in events_listeners.ts and imported to the index. Inital setup is imported in root dir index.js and instantiated.
        - **/ routes** - API routes defintions
          - naming convention - `/{route name directory}/` - lowercase
            - `{route name}.router.ts` - place where you define all routes for router ( ex. auth.router.ts ) - lowercase
